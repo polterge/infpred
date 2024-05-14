@@ -118,13 +118,10 @@ class Exp_Informer(Exp_Basic):
             pred, true = self._process_one_batch(
                 vali_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
                loss = criterion(pred.detach().cpu(), true.detach().cpu())
-            
                vali_loss.append(loss.item()) 
-               with open("./vali_loss.txt", 'w') as vali_los:
-                   vali_los.write(str(vali_loss))
-
-            
-            total_loss.append(loss)
+        with open("./vali_loss.txt", 'w') as vali_los:
+            vali_los.write(str(vali_loss))
+        total_loss.append(loss)
         total_loss = np.average(total_loss)
         self.model.train()
         return total_loss
