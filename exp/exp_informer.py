@@ -111,11 +111,10 @@ class Exp_Informer(Exp_Basic):
         return criterion
 
     def vali(self, vali_data, vali_loader, criterion):
-    self.model.eval()
-    total_loss = []  # 存储每个批次的损失值
-    vali_loss = []   # 存储验证集所有批次的损失值
-
-    for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(vali_loader):
+        self.model.eval()
+        total_loss = []  # 存储每个批次的损失值
+        vali_loss = []   # 存储验证集所有批次的损失值
+        for i, (batch_x, batch_y, batch_x_mark, batch_y_mark) in enumerate(vali_loader):
         pred, true = self._process_one_batch(
             vali_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
         loss = criterion(pred.detach().cpu(), true.detach().cpu())
@@ -123,13 +122,15 @@ class Exp_Informer(Exp_Basic):
         total_loss.append(loss)  # 将每个批次的损失添加到总损失列表中
 
     # 将验证集所有批次的损失写入文件
-    with open("./vali_loss.txt", 'w') as vali_los:
-        vali_los.write(str(vali_loss))  # 缩进到 with 语句的内部
+            with open("./vali_loss.txt", 'w') as vali_los:
+                vali_los.write(str(vali_loss))  # 缩进到 with 语句的内部
 
     # 计算平均损失
-    total_loss = np.average(total_loss)
-    self.model.train()
-    return total_loss
+        total_loss = np.average(total_loss)
+        self.model.train()
+        return total_loss
+
+
 
 
     def train(self, setting):
