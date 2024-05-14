@@ -120,8 +120,8 @@ class Exp_Informer(Exp_Basic):
             loss = criterion(pred.detach().cpu(), true.detach().cpu())
             
             vali_loss.append(loss.item()) 
-with open("./val_loss.txt", 'w') as vali_los:
-    vali_los.write(str(vali_loss))
+        with open("./vali_loss.txt", 'w') as vali_los:
+            vali_los.write(str(vali_loss))
 
             
             total_loss.append(loss)
