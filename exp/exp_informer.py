@@ -121,7 +121,7 @@ class Exp_Informer(Exp_Basic):
             
             vali_loss.append(loss.item()) 
             with open("./vali_loss.txt", 'w') as vali_los:
-            vali_los.write(str(vali_loss))
+                vali_los.write(str(vali_loss))
             
             total_loss.append(loss)
         total_loss = np.average(total_loss)
