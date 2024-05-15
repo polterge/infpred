@@ -152,7 +152,16 @@ class Exp_Informer(Exp_Basic):
 
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
+        all_epoch_train_loss = []
+        all_epoch_vali_loss = []
+        all_epoch_test_loss = []
+        with open("./train_loss.txt", 'w') as train_los:
+            train_los.write(str(all_epoch_train_loss))
+        with open("./vali_loss.txt", 'w') as vali_los:
+            vali_los.write(str(all_epoch_vali_loss))
+        
 
+        
         for epoch in range(self.args.train_epochs):
             iter_count = 0
             train_loss = []
@@ -168,8 +177,8 @@ class Exp_Informer(Exp_Basic):
                 loss = criterion(pred, true)
                 train_loss.append(loss.item())
 
-                with open("./train_loss.txt", 'w') as train_los:
-                    train_los.write(str(train_loss))
+                # with open("./train_loss.txt", 'w') as train_los:
+                #     train_los.write(str(train_loss))
                 
                 if (i+1) % 100==0:
                     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
