@@ -122,8 +122,8 @@ class Exp_Informer(Exp_Basic):
             total_loss.append(loss)  # 将每个批次的损失添加到总损失列表中
 
     # 将验证集所有批次的损失写入文件
-        with open("./vali_loss.txt", 'w') as vali_los:
-            vali_los.write(str(vali_loss))  # 缩进到 with 语句的内部
+        # with open("./vali_loss.txt", 'w') as vali_los:
+        #     vali_los.write(str(vali_loss))  # 缩进到 with 语句的内部
 
     # 计算平均损失
         total_loss = np.average(total_loss)
@@ -152,6 +152,7 @@ class Exp_Informer(Exp_Basic):
 
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
+            
         all_epoch_train_loss = []
         all_epoch_vali_loss = []
         all_epoch_test_loss = []
@@ -201,6 +202,12 @@ class Exp_Informer(Exp_Basic):
             vali_loss = self.vali(vali_data, vali_loader, criterion)
             test_loss = self.vali(test_data, test_loader, criterion)
 
+
+            all_epoch_train_loss.append(float(round(train_loss,3)))
+            all_epoch_vali_loss.append(float(round(vali_loss,3)))
+            all_epoch_test_loss.append(float(round(test_loss,3)))
+
+
             print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} Test Loss: {4:.7f}".format(
                 epoch + 1, train_steps, train_loss, vali_loss, test_loss))
             early_stopping(vali_loss, self.model, path)
@@ -212,8 +219,12 @@ class Exp_Informer(Exp_Basic):
             
         best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
-        
-        return self.model
+        info_dict["本次实验训练的train平均损失"] = round(float(np.mean(all_epoch_train_loss)),3)
+        info_dict["【验证】本次实验训练的vali平均损失"]  = round(float(np.mean(all_epoch_vali_loss)),3)
+        info_dict["【验证】本次实验训练的test平均损失"]  = round(float(np.mean(all_epoch_test_loss)),3)
+        info_dict["epoch"] = epoch_count
+
+        return self.model,info_dict,all_epoch_train_loss,all_epoch_vali_loss,all_epoch_test_loss,epoch_count
 
     def test(self, setting):
         test_data, test_loader = self._get_data(flag='test')
@@ -243,7 +254,7 @@ class Exp_Informer(Exp_Basic):
             os.makedirs(folder_path)
 
         mae, mse, rmse, mape, mspe = metric(preds, trues)
-        print('mse:{}, mae:{}'.format(mse, mae))
+        print('mse:{}, mae:{}, rmse:{}, mape:{}, mspe:{}'.format(mse, mae,rmse,mape,mspe))
 
         np.save(folder_path+'metrics.npy', np.array([mae, mse, rmse, mape, mspe]))
         np.save(folder_path+'pred.npy', preds)
