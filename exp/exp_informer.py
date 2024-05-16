@@ -105,10 +105,29 @@ class Exp_Informer(Exp_Basic):
     def _select_optimizer(self):
         model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
+    def dtw(x, y):
+        dp = np.zeros((len(x), len(y)))
     
+        # 计算动态规划矩阵
+        for i in range(len(x)):
+            for j in range(len(y)):
+                cost = abs(x[i] - y[j])  # 计算两个点之间的距离
+                if i == 0 and j == 0:
+                    dp[i][j] = cost
+                elif i == 0:
+                    dp[i][j] = dp[i][j-1] + cost
+                elif j == 0:
+                    dp[i][j] = dp[i-1][j] + cost
+                else:
+                    dp[i][j] = cost + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+        
+        # 返回最终的DTW损失值
+        dtw_loss = dp[len(x)-1][len(y)-1]
+        return dtw_loss
     def _select_criterion(self):
+        
         # criterion =  nn.MSELoss()
-        criterion =  nn.SmoothL1Loss()
+        criterion =  dtw()
         return criterion
 
     def vali(self, vali_data, vali_loader, criterion):
