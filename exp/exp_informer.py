@@ -127,7 +127,7 @@ class Exp_Informer(Exp_Basic):
     def _select_criterion(self):
         
         # criterion =  nn.MSELoss()
-        criterion =  dtw()
+        criterion =  self.dtw()
         return criterion
 
     def vali(self, vali_data, vali_loader, criterion):
