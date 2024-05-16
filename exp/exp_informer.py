@@ -178,6 +178,7 @@ class Exp_Informer(Exp_Basic):
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
         
         model_optim = self._select_optimizer()
+        pred, true = None, None
         criterion =  self._select_criterion(pred,true)
 
         if self.args.use_amp:
