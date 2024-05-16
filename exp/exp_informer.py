@@ -220,12 +220,12 @@ class Exp_Informer(Exp_Basic):
             
         best_model_path = path+'/'+'checkpoint.pth'
         self.model.load_state_dict(torch.load(best_model_path))
-        info_dict["本次实验训练的train平均损失"] = round(float(np.mean(all_epoch_train_loss)),3)
-        info_dict["【验证】本次实验训练的vali平均损失"]  = round(float(np.mean(all_epoch_vali_loss)),3)
-        info_dict["【验证】本次实验训练的test平均损失"]  = round(float(np.mean(all_epoch_test_loss)),3)
-        info_dict["epoch"] = epoch_count
+        # info_dict["本次实验训练的train平均损失"] = round(float(np.mean(all_epoch_train_loss)),3)
+        # info_dict["【验证】本次实验训练的vali平均损失"]  = round(float(np.mean(all_epoch_vali_loss)),3)
+        # info_dict["【验证】本次实验训练的test平均损失"]  = round(float(np.mean(all_epoch_test_loss)),3)
+        # info_dict["epoch"] = epoch_count
 
-        return self.model,info_dict,all_epoch_train_loss,all_epoch_vali_loss,all_epoch_test_loss,epoch_count
+        return self.model,all_epoch_train_loss,all_epoch_vali_loss,all_epoch_test_loss
 
     def test(self, setting):
         test_data, test_loader = self._get_data(flag='test')
