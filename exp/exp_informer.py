@@ -157,11 +157,6 @@ class Exp_Informer(Exp_Basic):
         all_epoch_train_loss = []
         all_epoch_vali_loss = []
         all_epoch_test_loss = []
-        with open("./train_loss.txt", 'w') as train_los:
-            train_los.write(str(all_epoch_train_loss))
-        with open("./vali_loss.txt", 'w') as vali_los:
-            vali_los.write(str(all_epoch_vali_loss))
-        
 
         
         for epoch in range(self.args.train_epochs):
@@ -207,7 +202,10 @@ class Exp_Informer(Exp_Basic):
             all_epoch_train_loss.append(float(round(train_loss,3)))
             all_epoch_vali_loss.append(float(round(vali_loss,3)))
             all_epoch_test_loss.append(float(round(test_loss,3)))
-
+            with open("./train_loss.txt", 'w') as train_los:
+                train_los.write(str(all_epoch_train_loss))
+            with open("./vali_loss.txt", 'w') as vali_los:
+                vali_los.write(str(all_epoch_vali_loss))
 
             print("Epoch: {0}, Steps: {1} | Train Loss: {2:.7f} Vali Loss: {3:.7f} Test Loss: {4:.7f}".format(
                 epoch + 1, train_steps, train_loss, vali_loss, test_loss))
