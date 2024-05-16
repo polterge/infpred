@@ -134,7 +134,7 @@ class Exp_Informer(Exp_Basic):
     #         return np.mean(dtw_losses)
 
     
-    def _select_criterion(self,pred,true):
+    def _select_criterion(self):
         criterion =  nn.SmoothL1Loss()
         # criterion =  nn.MSELoss()
         # criterion =  self.dtw_loss(pred,true)
@@ -180,7 +180,7 @@ class Exp_Informer(Exp_Basic):
         model_optim = self._select_optimizer()
         # pred, true = None, None
         # criterion =  self._select_criterion(pred,true)
-        criterion =  self._select_criterion(pred,true)
+        criterion =  self._select_criterion()
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
             
