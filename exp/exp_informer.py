@@ -124,10 +124,10 @@ class Exp_Informer(Exp_Basic):
         # 返回最终的DTW损失值
         dtw_loss = dp[len(x)-1][len(y)-1]
         return dtw_loss
-    def _select_criterion(self):
+    def _select_criterion(self,x,y):
         
         # criterion =  nn.MSELoss()
-        criterion =  self.dtw()
+        criterion =  self.dtw(x,y)
         return criterion
 
     def vali(self, vali_data, vali_loader, criterion):
