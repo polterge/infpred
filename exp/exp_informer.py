@@ -180,7 +180,7 @@ class Exp_Informer(Exp_Basic):
         model_optim = self._select_optimizer()
         # pred, true = None, None
         # criterion =  self._select_criterion(pred,true)
-        criterion =  self._select_criterion()
+        criterion =  self._select_criterion(pred,true)
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
             
