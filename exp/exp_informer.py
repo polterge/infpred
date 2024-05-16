@@ -107,37 +107,37 @@ class Exp_Informer(Exp_Basic):
         return model_optim
 
     
-    def dtw(x,y):
-        dp = np.zeros((len(x), len(y)))
-        # 计算动态规划矩阵
-        for i in range(len(x)):
-            for j in range(len(y)):
-                cost = abs(x[i] - y[j])  # 计算两个点之间的距离
-                if i == 0 and j == 0:
-                    dp[i][j] = cost
-                elif i == 0:
-                    dp[i][j] = dp[i][j-1] + cost
-                elif j == 0:
-                    dp[i][j] = dp[i-1][j] + cost
-                else:
-                    dp[i][j] = cost + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+    # def dtw(x,y):
+    #     dp = np.zeros((len(x), len(y)))
+    #     # 计算动态规划矩阵
+    #     for i in range(len(x)):
+    #         for j in range(len(y)):
+    #             cost = abs(x[i] - y[j])  # 计算两个点之间的距离
+    #             if i == 0 and j == 0:
+    #                 dp[i][j] = cost
+    #             elif i == 0:
+    #                 dp[i][j] = dp[i][j-1] + cost
+    #             elif j == 0:
+    #                 dp[i][j] = dp[i-1][j] + cost
+    #             else:
+    #                 dp[i][j] = cost + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
         
-        # 返回最终的DTW距离
-        dtw_distance = dp[len(x)-1][len(y)-1]
-        return dtw_distance
-    def dtw_loss(pred, true):
+    #     # 返回最终的DTW距离
+    #     dtw_distance = dp[len(x)-1][len(y)-1]
+    #     return dtw_distance
+    # def dtw_loss(pred, true):
             
-            dtw_losses = []
-            for i in range(len(pred)):
-                dtw_loss = Exp_Informer.dtw(pred[i], true[i])
-                dtw_losses.append(dtw_loss)
-            return np.mean(dtw_losses)
+    #         dtw_losses = []
+    #         for i in range(len(pred)):
+    #             dtw_loss = Exp_Informer.dtw(pred[i], true[i])
+    #             dtw_losses.append(dtw_loss)
+    #         return np.mean(dtw_losses)
 
     
     def _select_criterion(self,pred,true):
-        
+        criterion =  nn.SmoothL1Loss()
         # criterion =  nn.MSELoss()
-        criterion =  self.dtw_loss(pred,true)
+        # criterion =  self.dtw_loss(pred,true)
         return criterion
 
     def vali(self, vali_data, vali_loader, criterion):
@@ -178,9 +178,9 @@ class Exp_Informer(Exp_Basic):
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
         
         model_optim = self._select_optimizer()
-        pred, true = None, None
-        criterion =  self._select_criterion(pred,true)
-
+        # pred, true = None, None
+        # criterion =  self._select_criterion(pred,true)
+        criterion =  self._select_criterion()
         if self.args.use_amp:
             scaler = torch.cuda.amp.GradScaler()
             
@@ -202,10 +202,7 @@ class Exp_Informer(Exp_Basic):
                 pred, true = self._process_one_batch(
                     train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
                 loss = criterion(pred, true)
-                train_loss.append(loss.item())
-
-                # with open("./train_loss.txt", 'w') as train_los:
-                #     train_los.write(str(train_loss))
+                
                 
                 if (i+1) % 100==0:
                     print("\titers: {0}, epoch: {1} | loss: {2:.7f}".format(i + 1, epoch + 1, loss.item()))
