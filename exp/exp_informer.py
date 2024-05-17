@@ -103,8 +103,8 @@ class Exp_Informer(Exp_Basic):
         return data_set, data_loader
 
     def _select_optimizer(self):
-        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=1e-5, amsgrad=True)
-
+        # model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=1e-5, amsgrad=True)
+        model_optim = optim.Adam(self.model.parameters(), lr=self.args.learning_rate)
         return model_optim
 
     
