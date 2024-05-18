@@ -137,7 +137,7 @@ class Exp_Informer(Exp_Basic):
     
     def _select_criterion(self):
         # criterion =  nn.SmoothL1Loss()
-        criterion =  nn.MSELoss(reduction='mean')
+        criterion =  nn.L2Loss()
         # criterion =  self.dtw_loss(pred,true)
         return criterion
 
