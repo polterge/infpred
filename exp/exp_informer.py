@@ -18,6 +18,8 @@ import time
 import warnings
 warnings.filterwarnings('ignore')
 
+import torch.nn.functional as F
+
 class Exp_Informer(Exp_Basic):
     def __init__(self, args):
         super(Exp_Informer, self).__init__(args)
@@ -138,7 +140,7 @@ class Exp_Informer(Exp_Basic):
     def _select_criterion(self):
         # criterion =  nn.SmoothL1Loss()
         # criterion =  nn.MSELoss()
-        criterion =  nn.kl_div()
+        criterion =  F.kl_div()
         # criterion =  self.dtw_loss(pred,true)
         return criterion
 
