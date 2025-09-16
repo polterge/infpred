@@ -38,7 +38,8 @@ parser.add_argument('--attn', type=str, default='prob', help='attention used in 
 parser.add_argument('--embed', type=str, default='timeF', help='time features encoding, options:[timeF, fixed, learned]')
 parser.add_argument('--activation', type=str, default='gelu',help='activation')
 parser.add_argument('--output_attention', action='store_true', help='whether to output attention in ecoder')
-parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
+#parser.add_argument('--do_predict', action='store_true', help='whether to predict unseen future data')
+parser.add_argument('--do_predict', action='store_false', help='whether to predict unseen future data')
 parser.add_argument('--mix', action='store_false', help='use mix attention in generative decoder', default=True)
 parser.add_argument('--cols', type=str, nargs='+', help='certain cols from the data files as the input features')
 parser.add_argument('--num_workers', type=int, default=0, help='data loader num workers')
@@ -111,5 +112,6 @@ for ii in range(args.itr):
         exp.predict(setting, True)
 
     torch.cuda.empty_cache()
+
 
 
