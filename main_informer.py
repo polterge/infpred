@@ -49,11 +49,13 @@ parser.add_argument('--batch_size', type=int, default=32, help='batch size of tr
 parser.add_argument('--patience', type=int, default=3, help='early stopping patience')
 parser.add_argument('--learning_rate', type=float, default=0.0001, help='optimizer learning rate')
 parser.add_argument('--des', type=str, default='test',help='exp description')
-parser.add_argument('--loss', type=str, default='mse',help='loss function')
+parser.add_argument('--loss', type=str, default='mae',help='loss function')
+#mse，MSE目标过度最小化平均平方差，使模型难以迅速调整对突变的预测
 parser.add_argument('--lradj', type=str, default='type1',help='adjust learning rate')
 parser.add_argument('--use_amp', action='store_true', help='use automatic mixed precision training', default=False)
-parser.add_argument('--inverse', action='store_true', help='inverse output data', default=False)
-
+#parser.add_argument('--inverse', action='store_true', help='inverse output data', default=False)
+parser.add_argument('--inverse', action='store_true', help='inverse output data', default=True)
+#true即将预测结果化回原始尺度（原始数据的物理量）
 parser.add_argument('--use_gpu', type=bool, default=True, help='use gpu')
 parser.add_argument('--gpu', type=int, default=0, help='gpu')
 parser.add_argument('--use_multi_gpu', action='store_true', help='use multiple gpus', default=False)
@@ -112,6 +114,7 @@ for ii in range(args.itr):
         exp.predict(setting, True)
 
     torch.cuda.empty_cache()
+
 
 
 
